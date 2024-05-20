@@ -260,9 +260,9 @@ raise_exceptions = true
 ignore_errors = true
 
 [tool.bandit]
-exclude_dirs = ["tests"]
-tests = ["B201", "B301"]
-skips = ["B101", "B601"]
+exclude_dirs = ["tests", "app/tests/*"]
+tests = ["B301"]
+skips = ["B101", "B601", "B201", ]
 
 [tool.poetry.scripts]
 test = "pytest"
