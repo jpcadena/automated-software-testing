@@ -20,7 +20,10 @@ keywords = [
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Environment :: Web Environment",
     "Framework :: Pytest",
+    "Framework :: Flask",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Information Technology",
@@ -33,13 +36,19 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.12",
-    "Topic :: Communications :: Email",
-    "Topic :: Communications :: Internet Phone",
+    "Topic :: Communications",
     "Topic :: Documentation",
     "Topic :: Education :: Testing",
     "Topic :: File Formats",
+    "Topic :: File Formats :: JSON",
+    "Topic :: File Formats :: JSON :: JSON Schema",
     "Topic :: Internet",
     "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP :: WSGI",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Server",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Software Development",
@@ -50,6 +59,8 @@ classifiers = [
     "Topic :: Software Development :: Version Control",
     "Topic :: Software Development :: Version Control :: CVS",
     "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: System",
+    "Topic :: Terminals",
     "Topic :: Text Processing :: Markup :: HTML",
     "Topic :: Text Processing :: Markup :: Markdown",
     "Topic :: Text Processing :: Markup :: reStructuredText",
@@ -64,6 +75,7 @@ ruff = "^0.4.4"
 mypy = "^1.10.0"
 pre-commit = "^3.7.1"
 pytest = "^8.2.1"
+flask = "^3.0.3"
 
 
 [build-system]
@@ -79,7 +91,7 @@ pytest = "^8.2.1"
 [tool.isort]
 py_version = 312
 skip_glob = ["cache/*", ".ruff_cache/*", ".pytest_cache/*", ".dockerignore", "logs/*"]
-#skip_gitignore = true
+skip_gitignore = true
 line_length = 80
 multi_line_output = 3
 use_parentheses = true
