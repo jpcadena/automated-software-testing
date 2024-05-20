@@ -12,6 +12,11 @@ from cli.post import Post
 
 class AppTest(TestCase):
     def setUp(self) -> None:
+        """
+        Set up the test suite
+        :return: None
+        :rtype: NoneType
+        """
         blog: Blog = Blog("Test", "Test author")
         main.blogs = {"Test": blog}
 

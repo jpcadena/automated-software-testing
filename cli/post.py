@@ -13,6 +13,11 @@ class Post:
         self.content: str = content
 
     def json(self) -> dict[str, str]:
+        """
+        Construct a JSON representation of the post
+        :return: The JSON representation of the post
+        :rtype: dict[str, str]
+        """
         return {
             "title": self.title,
             "content": self.content,

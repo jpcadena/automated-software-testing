@@ -76,6 +76,8 @@ mypy = "^1.10.0"
 pre-commit = "^3.7.1"
 pytest = "^8.2.1"
 flask = "^3.0.3"
+sqlalchemy = "^2.0.30"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

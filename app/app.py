@@ -6,6 +6,8 @@ import os
 
 from flask import Flask, Response, jsonify, send_from_directory
 
+from restful_api.app.config.config import Config
+
 app: Flask = Flask(__name__)
 
 
@@ -39,6 +41,6 @@ def favicon() -> Response:
 
 if __name__ == "__main__":
     app.run(
-        debug=True,
-        use_reloader=True,
+        debug=Config.DEBUG,
+        use_reloader=Config.USE_RELOADER,
     )
