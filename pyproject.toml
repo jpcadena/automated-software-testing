@@ -1,0 +1,306 @@
+[tool.poetry]
+name = "automated-software-testing"
+version = "0.1.0"
+description = "Automated Software Testing"
+license = "MIT"
+authors = ["Juan Pablo Cadena Aguilar <jpcadena@espol.edu.ec>"]
+maintainers = ["Juan Pablo Cadena Aguilar <jpcadena@espol.edu.ec>"]
+readme = "README.md"
+homepage = "https://github.com/jpcadena/automated-software-testing"
+repository = "https://github.com/jpcadena/automated-software-testing"
+documentation = "https://github.com/jpcadena/automated-software-testing"
+keywords = [
+    "python",
+    "testing",
+    "poetry",
+    "isort",
+    "ruff",
+    "black-formatter",
+    "mypy",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Natural Language :: Spanish",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Email",
+    "Topic :: Communications :: Internet Phone",
+    "Topic :: Documentation",
+    "Topic :: Education :: Testing",
+    "Topic :: File Formats",
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Testing :: Acceptance",
+    "Topic :: Software Development :: Testing :: Mocking",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Topic :: Software Development :: Version Control",
+    "Topic :: Software Development :: Version Control :: CVS",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Topic :: Text Processing :: Markup :: reStructuredText",
+    "Typing :: Typed",
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+isort = "^5.13.2"
+black = "^24.4.2"
+ruff = "^0.4.4"
+mypy = "^1.10.0"
+pre-commit = "^3.7.1"
+pytest = "^8.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.2.1"
+
+[tool.poetry.urls]
+"Automated Software Testing with Python" = "https://github.com/jpcadena/automated-software-testing"
+
+[tool.isort]
+py_version = 312
+skip_glob = ["cache/*", ".ruff_cache/*", ".pytest_cache/*", ".dockerignore", "logs/*"]
+#skip_gitignore = true
+line_length = 80
+multi_line_output = 3
+use_parentheses = true
+atomic = true
+include_trailing_comma = true
+force_grid_wrap = 0
+case_sensitive = true
+ensure_newline_before_comments = true
+profile = "black"
+remove_redundant_aliases = true
+color_output = true
+
+[tool.black]
+line-length = 80
+target-version = ["py312"]
+exclude = '''
+(
+    /(\.venv
+  | \.mypy_cache
+  | \.ruff_cache
+  | \.pytest_cache
+  | cache
+  | venv
+  | tests)/
+)
+'''
+skip-string-normalization = true
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".pytest_cache",
+    "cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+line-length = 80
+indent-width = 4
+target-version = "py312"
+fix = true
+output-format = "grouped"
+show-fixes = true
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "C4", # flake8-comprehensions
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+]
+fixable = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "I",
+    "N",
+    "Q",
+    "S",
+    "T",
+    "W",
+    "ANN",
+    "ARG",
+    "BLE",
+    "COM",
+    "DJ",
+    "DTZ",
+    "EM",
+    "ERA",
+    "EXE",
+    "FBT",
+    "ICN",
+    "INP",
+    "ISC",
+    "NPY",
+    "PD",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PTH",
+    "PYI",
+    "RET",
+    "RSE",
+    "RUF",
+    "SIM",
+    "SLF",
+    "TCH",
+    "TID",
+    "TRY",
+    "UP",
+    "YTT",
+]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = 80
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"  # google, numpy
+ignore-decorators = ["typing.overload"]
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
+
+[tool.mypy]
+exclude = ".venv|venv|tests|cache|.mypy_cache|.ruff_cache|.pytest_cache"
+ignore_missing_imports = true
+follow_imports = "silent"
+python_version = "3.12"
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+implicit_reexport = false
+strict_equality = true
+strict = true
+show_error_context = true
+show_error_codes = true
+pretty = true
+show_traceback = true
+raise_exceptions = true
+
+[tool.mypy-tests]
+ignore_errors = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
+
+[tool.poetry.scripts]
+test = "pytest"
+
+[tool.pytest.ini_options]
+addopts = [
+    "-rxXs", # Display extra info for test failures
+    "--strict-config", # Enforce strict pytest configuration
+    "--strict-markers", # Enforce strict markers
+    "--ignore=docs_src", # Ignore the 'docs_src' directory
+    "--durations=10"
+]
+empty_parameter_set_mark = "xfail"
+faulthandler_timeout = 5
+filterwarnings = [
+    "error",
+    'ignore:The loop argument is deprecated since Python 3\.8, and scheduled for removal in Python 3\.10:DeprecationWarning:asyncio',
+    'ignore:starlette.middleware.wsgi is deprecated and will be removed in a future release\..*:DeprecationWarning:starlette',
+    "ignore:'cgi' is deprecated:DeprecationWarning",
+    "ignore:'crypt' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
+    'ignore::pytest.PytestDeprecationWarning:pytest_cov',
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+    "ignore:the imp module is deprecated in favour of importlib:DeprecationWarning",
+]
+junit_duration_report = "call"
+junit_logging = "system-out"
+junit_log_passing_tests = false
+log_auto_indent = true
+log_cli = true
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_cli_format = "%(asctime)s [%(level)s] %(message)s"
+log_cli_level = "INFO"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_file = "logs/pytest-logs.txt"
+log_file_date_format = "%Y-%m-%d %H:%M:%S"
+log_file_format = "%(asctime)s [%(level)s] %(message)s"
+log_file_level = "INFO"
+log_format = "%(asctime)s [%(level)s] %(message)s"
+log_level = "INFO"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration (deselect with '-m \"not integration\"')",
+]
+minversion = "6.0"
+norecursedirs = [".svn", "_build", "tmp*", "node_modules", "venv", ".venv"]
+python_classes = "*TestSuite"
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*", "*_test"]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]
+verbosity_assertions = 2
+xfail_strict = true
