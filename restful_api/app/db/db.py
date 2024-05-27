@@ -2,12 +2,18 @@
 A module for db in the restful_api.db package.
 """
 
+from typing import Type
+
 from flask import Flask
 from sqlalchemy import Engine, create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    declarative_base,
+    scoped_session,
+    sessionmaker,
+)
 
 from ..config.config import Config
-from ..models.item import Base
 
 engine: Engine = create_engine(
     Config.SQLALCHEMY_DATABASE_URI,
@@ -15,6 +21,7 @@ engine: Engine = create_engine(
     future=True,
 )
 Session = scoped_session(sessionmaker(bind=engine))
+Base: Type[DeclarativeBase] = declarative_base()
 
 
 def init_db(app: Flask) -> None:

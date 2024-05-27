@@ -1,24 +1,24 @@
 """
-A module for item in the restful_api-models package.
+A module for store in the restful api.app.models package.
 """
 
 from typing import TYPE_CHECKING, Any, Optional, Type
 
-from sqlalchemy import CheckConstraint, Float, ForeignKey, Integer, String
+from sqlalchemy import CheckConstraint, Integer, String
 from sqlalchemy.orm import Mapped, Session, mapped_column, relationship
 
 from restful_api.app.db.db import Base
 
 if TYPE_CHECKING:
-    from ..models.store import Store
+    from ..models.item import Item
 
 
-class Item(Base):  # type: ignore
+class Store(Base):  # type: ignore
     """
-    SQLAlchemy model for items.
+    Store model class representing the "store" table
     """
 
-    __tablename__ = "items"
+    __tablename__ = "store"
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -26,64 +26,39 @@ class Item(Base):  # type: ignore
         nullable=False,
         primary_key=True,
         unique=True,
-        comment="ID of the item",
+        comment="ID of the store",
     )
     name: Mapped[str] = mapped_column(
         String(80),
         nullable=False,
         comment="Name of the item",
     )
-    price: Mapped[float] = mapped_column(
-        Float(
-            precision=2,
-        ),
-        nullable=False,
-        comment="Price of the item",
-    )
-    store_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey(
-            "store.id",
-            name="store_id_fkey",
-        ),
-        nullable=False,
-        comment="ID of the store",
-    )
-    store: Mapped["Store"] = relationship(
-        "Store",
-        back_populates="items",
-        lazy="joined",
+    items: Mapped[list["Item"]] = relationship(
+        "Item",
+        back_populates="store",
+        lazy="dynamic",
     )
 
     __table_args__ = (
         CheckConstraint(
             "length(name) >= 4",
-            name="items_name_length",
-        ),
-        CheckConstraint(
-            "price >= 0.0",
-            name="items_price_non_negative",
+            name="store_name_length",
         ),
     )
 
-    def __init__(
-        self, name: str, price: float, store_id: int, **kw: Any
-    ) -> None:
+    def __init__(self, name: str, **kw: Any) -> None:
         super().__init__(**kw)
         self.name: str = name
-        self.price: float = price
-        self.store_id: int = store_id
 
     def json(self) -> dict[str, Any]:
         """
-        Convert the item instance to a dictionary.
-        :return: A dictionary representation of the item.
+        Convert the store instance to a dictionary.
+        :return: A dictionary representation of the store.
         :rtype: dict[str, Any]
         """
         return {
             "name": self.name,
-            "price": self.price,
-            "store_id": self.store_id,
+            "items": [item.json() for item in self.items],
         }
 
     @classmethod
@@ -91,21 +66,21 @@ class Item(Base):  # type: ignore
         cls: Type[Base],  # type: ignore
         session: Session,
         name: str,
-    ) -> Optional["Item"]:
+    ) -> Optional["Store"]:
         """
-        Find an item by its name.
+        Find a store by its name.
         :param session: The SQLAlchemy session to use for the query.
         :type session: Session
-        :param name: The name of the item to find.
+        :param name: The name of the store to find.
         :type name: str
-        :return: The item instance if found, None otherwise.
+        :return: The store instance if found, None otherwise.
         :rtype: Optional[Item]
         """
         return session.query(cls).filter_by(name=name).first()
 
     def save_to_db(self, session: Session) -> None:
         """
-        Save the item to the database.
+        Save the store to the database.
         :param session: The SQLAlchemy session to use for the operation.
         :type session: Session
         :return: None
@@ -116,7 +91,7 @@ class Item(Base):  # type: ignore
 
     def delete_from_db(self, session: Session) -> None:
         """
-        Delete the item from the database.
+        Delete the store from the database.
         :param session: The SQLAlchemy session to use for the operation.
         :type session: Session
         :return: None

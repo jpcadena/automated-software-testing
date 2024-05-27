@@ -9,7 +9,7 @@ from restful_api.app.models.item import Item
 
 class ItemTest(TestCase):
     def test_create_item(self) -> None:
-        item: Item = Item("test", 19.99)
+        item: Item = Item("test", 19.99, 1)
         self.assertEqual(
             item.name,
             "test",
@@ -22,10 +22,21 @@ class ItemTest(TestCase):
             "The price of the item after creation does not equal the"
             " constructor argument.",
         )
+        self.assertEqual(
+            item.store_id,
+            1,
+        )
+        self.assertIsNone(
+            item.store,
+        )
 
     def test_item_json(self) -> None:
-        item: Item = Item("test", 19.99)
-        expected: dict[str, str | float] = {"name": "test", "price": 19.99}
+        item: Item = Item("test", 19.99, 1)
+        expected: dict[str, str | float | int] = {
+            "name": "test",
+            "price": 19.99,
+            "store_id": 1,
+        }
         self.assertEqual(
             item.json(),
             expected,

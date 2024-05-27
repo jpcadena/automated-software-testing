@@ -20,9 +20,7 @@ def get_item(name: str) -> Response:
     :rtype: Response
     """
     session = Session()
-    item = Item.find_by_name(session, name)
-    print(type(item))
-    if item:
+    if item := Item.find_by_name(session, name):
         response: Response = make_response(jsonify(item.json()), 200)
         response.headers["Content-Type"] = "application/json"
         return response
@@ -47,8 +45,7 @@ def post_item(name: str) -> Response:
         response.headers["Content-Type"] = "application/json"
         return response
     data: dict[str, Any] = request.get_json()
-    item = Item(name, data["price"])
-    print(type(item))
+    item: Item = Item(name, **data)
     try:
         item.save_to_db(session)
     except SQLAlchemyError as e:
@@ -75,9 +72,7 @@ def delete_item(name: str) -> Response:
     :rtype: Response
     """
     session = Session()
-    item = Item.find_by_name(session, name)
-    print(type(item))
-    if item:
+    if item := Item.find_by_name(session, name):
         item.delete_from_db(session)
         response: Response = make_response(
             jsonify({"message": "Item deleted"}), 200
@@ -97,10 +92,9 @@ def put_item(name: str) -> Response:
     """
     session = Session()
     data: dict[str, Any] = request.get_json()
-    item = Item.find_by_name(session, name)
-    print(type(item))
+    item: Item | None = Item.find_by_name(session, name)
     if item is None:
-        item = Item(name, data["price"])
+        item = Item(name, **data)
     else:
         item.price = data["price"]
     item.save_to_db(session)

@@ -8,8 +8,8 @@ it is a new, blank database each time.
 from unittest import TestCase
 
 from restful_api.app.db import db
-from restful_api.app.db.db import Session, engine
-from restful_api.app.models.item import Base
+from restful_api.app.db.db import Base, Session, engine
+from restful_api.app.models.store import Store
 from restful_api.run import app
 
 
@@ -20,9 +20,17 @@ class BaseTest(TestCase):
         :return: None
         :rtype: NoneType
         """
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///"
+        app.config["SQLALCHEMY_DATABASE_URI"] = (
+            "postgresql://postgres:1234@localhost:5432/test"
+        )
+        app.config["TESTING"] = True
+        # SQLite does not support Foreign keys
         with app.app_context():
             db.init_db(app)
+            session = Session()
+            store: Store = Store(name="Test Store")
+            session.add(store)
+            session.commit()
         self.app = app.test_client()
         self.app_context = app.app_context()
 
