@@ -74,7 +74,7 @@ black = "^24.4.2"
 ruff = "^0.4.5"
 mypy = "^1.10.0"
 pre-commit = "^3.7.1"
-pytest = "^8.2.1"
+pytest = "^8.2.2"
 flask = "^3.0.3"
 sqlalchemy = "^2.0.30"
 python-dotenv = "^1.0.1"
@@ -85,7 +85,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.2.1"
+pytest = "^8.2.2"
 
 [tool.poetry.urls]
 "Automated Software Testing with Python" = "https://github.com/jpcadena/automated-software-testing"
