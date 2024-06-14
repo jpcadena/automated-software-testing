@@ -2,8 +2,11 @@
 A module for test item in the restful api.tests.integration.models package.
 """
 
+from typing import Any
+
 from werkzeug.test import TestResponse
 
+from restful_api.app.core.utils import encode_jwt
 from restful_api.app.db.db import Session
 from restful_api.app.models.item import Item
 from restful_api.app.models.store import Store
@@ -11,22 +14,35 @@ from restful_api.tests.test_base import BaseTest
 
 
 class ItemTest(BaseTest):
+    def get_token(self) -> str:
+        return encode_jwt(identity=1)
+
+    def create_item_get_token(self, store: Store, session: Any) -> str:
+        item: Item = Item(name="test_item", price=2.99, store_id=store.id)
+        item.save_to_db(session)
+        return self.get_token()
+
     def test_create_item(self) -> None:
         """
         Test the creation of an item
         :return: None
         :rtype: NoneType
         """
-        response: TestResponse = self.app.post(
+        session = Session()
+        store: Store = Store(name="test_store")
+        store.save_to_db(session)
+        token: str = self.create_item_get_token(store, session)
+        test_response: TestResponse = self.app.post(
             "/item/test_item",
             json={
                 "price": 10.99,
                 "store_id": 1,
             },
+            headers={"Authorization": f"Bearer {token}"},
         )
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(test_response.status_code, 201)
         self.assertEqual(
-            response.json,
+            test_response.json,
             {
                 "name": "test_item",
                 "price": 10.99,
@@ -40,17 +56,25 @@ class ItemTest(BaseTest):
         :return: None
         :rtype: NoneType
         """
+        session = Session()
+        store: Store = Store(name="test_store")
+        store.save_to_db(session)
+        token: str = self.create_item_get_token(store, session)
         self.app.post(
             "/item/test_item",
             json={
                 "price": 10.99,
                 "store_id": 1,
             },
+            headers={"Authorization": f"Bearer {token}"},
         )
-        response: TestResponse = self.app.get("/item/test_item")
-        self.assertEqual(response.status_code, 200)
+        test_response: TestResponse = self.app.get(
+            "/item/test_item",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        self.assertEqual(test_response.status_code, 200)
         self.assertEqual(
-            response.json,
+            test_response.json,
             {
                 "name": "test_item",
                 "price": 10.99,
@@ -64,19 +88,30 @@ class ItemTest(BaseTest):
         :return: None
         :rtype: NoneType
         """
+        session = Session()
+        store: Store = Store(name="test_store")
+        store.save_to_db(session)
+        token: str = self.create_item_get_token(store, session)
         self.app.post(
             "/item/test_item",
             json={
                 "price": 10.99,
                 "store_id": 1,
             },
+            headers={"Authorization": f"Bearer {token}"},
         )
-        response: TestResponse = self.app.delete("/item/test_item")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {"message": "Item deleted"})
-        response = self.app.get("/item/test_item")
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json, {"message": "Item not found"})
+        test_response: TestResponse = self.app.delete(
+            "/item/test_item",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        self.assertEqual(test_response.status_code, 200)
+        self.assertEqual(test_response.json, {"message": "Item deleted"})
+        test_response = self.app.get(
+            "/item/test_item",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        self.assertEqual(test_response.status_code, 404)
+        self.assertEqual(test_response.json, {"message": "Item not found"})
 
     def test_update_item(self) -> None:
         """
@@ -84,27 +119,33 @@ class ItemTest(BaseTest):
         :return: None
         :rtype: NoneType
         """
+        session = Session()
+        store: Store = Store(name="test_store")
+        store.save_to_db(session)
+        token: str = self.create_item_get_token(store, session)
         self.app.post(
             "/item/test_item",
             json={
                 "price": 10.99,
                 "store_id": 1,
             },
+            headers={"Authorization": f"Bearer {token}"},
         )
-        response: TestResponse = self.app.put(
+        test_response: TestResponse = self.app.put(
             "/item/test_item",
             json={
                 "price": 15.99,
                 "store_id": 1,
             },
+            headers={"Authorization": f"Bearer {token}"},
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(test_response.status_code, 200)
         self.assertEqual(
-            response.json,
+            test_response.json,
             {
                 "name": "test_item",
                 "price": 15.99,
-                "store_id": 1,
+                "store_id": 2,
             },
         )
 

@@ -12,7 +12,7 @@ from restful_api.app.resources.store import (
 )
 
 
-def register_routes(app: Flask) -> None:
+def register_store(app: Flask) -> None:
     """
     Register routes to the RESTful API
     :param app: The Flask application

@@ -11,6 +11,8 @@ app: Flask = create_app()
 
 if __name__ == "__main__":
     app.run(
+        host=Config.HOST,
+        port=Config.PORT,
         debug=Config.DEBUG,
         use_reloader=Config.USE_RELOADER,
     )

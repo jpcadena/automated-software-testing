@@ -4,9 +4,11 @@ A module for item in the restful_api-resources package.
 
 from typing import Any
 
-from flask import Response, jsonify, make_response, request
+from authlib.integrations.flask_oauth2 import current_token
+from flask import Response, request
 from sqlalchemy.exc import SQLAlchemyError
 
+from ..core.utils import generate_response
 from ..db.db import Session
 from ..models.item import Item
 
@@ -19,12 +21,13 @@ def get_item(name: str) -> Response:
     :return: JSON response containing the item data or an error message.
     :rtype: Response
     """
+    token_data: dict[str, Any] = current_token
+    if not token_data:
+        return generate_response({"message": "Unauthorized"}, 401)
     session = Session()
     if item := Item.find_by_name(session, name):
-        response: Response = make_response(jsonify(item.json()), 200)
-        response.headers["Content-Type"] = "application/json"
-        return response
-    return make_response(jsonify({"message": "Item not found"}), 404)
+        return generate_response(item.json(), 200)
+    return generate_response({"message": "Item not found"}, 404)
 
 
 def post_item(name: str) -> Response:
@@ -38,29 +41,19 @@ def post_item(name: str) -> Response:
     session = Session()
     response: Response
     if Item.find_by_name(session, name):
-        response = make_response(
-            jsonify({"message": f"An item with name '{name}' already exists."}),
-            400,
+        return generate_response(
+            {"message": f"An item with name '{name}' already exists."}, 400
         )
-        response.headers["Content-Type"] = "application/json"
-        return response
     data: dict[str, Any] = request.get_json()
     item: Item = Item(name, **data)
     try:
         item.save_to_db(session)
     except SQLAlchemyError as e:
         session.rollback()
-        response = make_response(
-            jsonify(
-                {"message": f"An error occurred inserting the item: {str(e)}"}
-            ),
-            500,
+        return generate_response(
+            {"message": f"An error occurred inserting the item: {str(e)}"}, 500
         )
-        response.headers["Content-Type"] = "application/json"
-        return response
-    response = make_response(jsonify(item.json()), 201)
-    response.headers["Content-Type"] = "application/json"
-    return response
+    return generate_response(item.json(), 201)
 
 
 def delete_item(name: str) -> Response:
@@ -74,12 +67,8 @@ def delete_item(name: str) -> Response:
     session = Session()
     if item := Item.find_by_name(session, name):
         item.delete_from_db(session)
-        response: Response = make_response(
-            jsonify({"message": "Item deleted"}), 200
-        )
-        response.headers["Content-Type"] = "application/json"
-        return response
-    return make_response(jsonify({"message": "Item not found"}), 404)
+        return generate_response({"message": "Item deleted"}, 200)
+    return generate_response({"message": "Item not found"}, 404)
 
 
 def put_item(name: str) -> Response:
@@ -98,9 +87,7 @@ def put_item(name: str) -> Response:
     else:
         item.price = data["price"]
     item.save_to_db(session)
-    response: Response = make_response(jsonify(item.json()), 200)
-    response.headers["Content-Type"] = "application/json"
-    return response
+    return generate_response(item.json(), 200)
 
 
 def get_items() -> Response:
@@ -111,8 +98,4 @@ def get_items() -> Response:
     """
     session = Session()
     items: list[Item] = session.query(Item).all()
-    response: Response = make_response(
-        jsonify({"items": [item.json() for item in items]}), 200
-    )
-    response.headers["Content-Type"] = "application/json"
-    return response
+    return generate_response({"items": [item.json() for item in items]}, 200)

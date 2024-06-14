@@ -33,5 +33,4 @@ def init_db(app: Flask) -> None:
     :rtype: NoneType
     """
     with app.app_context():
-        if app.config["DEBUG"]:
-            Base.metadata.create_all(engine)
+        Base.metadata.create_all(engine)

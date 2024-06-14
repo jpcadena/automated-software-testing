@@ -2,11 +2,10 @@
 A module for store in the restful api.app.resources package.
 """
 
-from typing import Any
-
-from flask import Response, jsonify, make_response, request
+from flask import Response
 from sqlalchemy.exc import SQLAlchemyError
 
+from ..core.utils import generate_response
 from ..db.db import Session
 from ..models.store import Store
 
@@ -20,13 +19,9 @@ def get_store(name: str) -> Response:
     :rtype: Response
     """
     session = Session()
-    store = Store.find_by_name(session, name)
-    print(type(store))
-    if store:
-        response: Response = make_response(jsonify(store.json()), 200)
-        response.headers["Content-Type"] = "application/json"
-        return response
-    return make_response(jsonify({"message": "Store not found"}), 404)
+    if store := Store.find_by_name(session, name):
+        return generate_response(store.json(), 200)
+    return generate_response({"message": "Store not found"}, 404)
 
 
 def post_store(name: str) -> Response:
@@ -39,34 +34,19 @@ def post_store(name: str) -> Response:
     :rtype: Response
     """
     session = Session()
-    response: Response
     if Store.find_by_name(session, name):
-        response = make_response(
-            jsonify(
-                {"message": f"A store with name '{name}' already " f"exists."}
-            ),
-            400,
+        return generate_response(
+            {"message": f"A store with name '{name}' already exists."}, 400
         )
-        response.headers["Content-Type"] = "application/json"
-        return response
-    data: dict[str, Any] = request.get_json()
-    store = Store(name, **data)
-    print(type(store))
+    store = Store(name)
     try:
         store.save_to_db(session)
+        return generate_response(store.json(), 201)
     except SQLAlchemyError as e:
         session.rollback()
-        response = make_response(
-            jsonify(
-                {"message": f"An error occurred inserting the store: {str(e)}"}
-            ),
-            500,
+        return generate_response(
+            {"message": f"An error occurred inserting the store: {str(e)}"}, 500
         )
-        response.headers["Content-Type"] = "application/json"
-        return response
-    response = make_response(jsonify(store.json()), 201)
-    response.headers["Content-Type"] = "application/json"
-    return response
 
 
 def delete_store(name: str) -> Response:
@@ -78,16 +58,10 @@ def delete_store(name: str) -> Response:
     :rtype: Response
     """
     session = Session()
-    store = Store.find_by_name(session, name)
-    print(type(store))
-    if store:
+    if store := Store.find_by_name(session, name):
         store.delete_from_db(session)
-        response: Response = make_response(
-            jsonify({"message": "Store deleted"}), 200
-        )
-        response.headers["Content-Type"] = "application/json"
-        return response
-    return make_response(jsonify({"message": "Store not found"}), 404)
+        return generate_response({"message": "Store deleted"}, 200)
+    return generate_response({"message": "Store not found"}, 404)
 
 
 def get_stores() -> Response:
@@ -98,8 +72,6 @@ def get_stores() -> Response:
     """
     session = Session()
     stores: list[Store] = session.query(Store).all()
-    response: Response = make_response(
-        jsonify({"stores": [store.json() for store in stores]}), 200
+    return generate_response(
+        {"stores": [store.json() for store in stores]}, 200
     )
-    response.headers["Content-Type"] = "application/json"
-    return response

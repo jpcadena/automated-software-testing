@@ -1,38 +1,40 @@
 """
-A module for test base in the restful api-tests package.
-This class should be the parent class of each non-unit test.
-It allows for instantiation of the database dynamically and makes sure that
-it is a new, blank database each time.
+A module for base test in the restful api.tests.system package.
 """
 
 from unittest import TestCase
 
 from restful_api.app.db import db
 from restful_api.app.db.db import Base, Session, engine
-from restful_api.app.models.store import Store
 from restful_api.run import app
 
 
 class BaseTest(TestCase):
-    def setUp(self) -> None:
+    @classmethod
+    def setUpClass(cls) -> None:
         """
-        Set up the test base module
+        Set up the base class for tests
         :return: None
         :rtype: NoneType
         """
         app.config["SQLALCHEMY_DATABASE_URI"] = (
             "postgresql://postgres:1234@localhost:5432/test"
         )
-        # SQLite does not support Foreign keys
-        app.config["TESTING"] = True
+        app.config["DEBUG"] = True
+        with app.app_context():
+            Base.metadata.create_all(bind=engine)
+
+    def setUp(self) -> None:
+        """
+        Set up the test base module
+        :return: None
+        :rtype: NoneType
+        """
         with app.app_context():
             db.init_db(app)
-            session = Session()
-            store: Store = Store(name="Test Store")
-            session.add(store)
-            session.commit()
-        self.app = app.test_client()
-        self.app_context = app.app_context()
+            Base.metadata.create_all(bind=engine)  # Ensure tables are created
+        self.app = app.test_client
+        self.app_context = app.app_context
 
     def tearDown(self) -> None:
         """
