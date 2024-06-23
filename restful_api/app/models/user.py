@@ -60,8 +60,9 @@ class User(Base):  # type: ignore
         :rtype: dict[str, Any]
         """
         return {
-            "username": self.username,
-            "password": self.password,
+            k: v
+            for k, v in self.__dict__.items()
+            if k in ["username", "password"]
         }
 
     @classmethod
@@ -122,7 +123,4 @@ class User(Base):  # type: ignore
         :param password: The plaintext password
         :return: True if passwords match, False otherwise
         """
-        print("Checking password")
-        print(password, self.password)
-        # return check_password_hash(self.password, password)
         return self.password == password
