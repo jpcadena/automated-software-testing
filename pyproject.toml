@@ -1,3 +1,4 @@
+[tool]
 [tool.poetry]
 name = "automated-software-testing"
 version = "0.1.0"
@@ -71,24 +72,19 @@ classifiers = [
 python = "^3.12"
 isort = "^5.13.2"
 black = "^24.4.2"
-ruff = "^0.4.8"
+ruff = "^0.4.10"
 mypy = "^1.10.0"
 pre-commit = "^3.7.1"
-pytest = "^8.2.2"
 flask = "^3.0.3"
-sqlalchemy = "^2.0.30"
+sqlalchemy = "^2.0.31"
 python-dotenv = "^1.0.1"
 authlib = "^1.3.1"
 requests = "^2.32.3"
-types-requests = "^2.32.0.20240602"
-
+types-requests = "^2.32.0.20240622"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.dev-dependencies]
-pytest = "^8.2.2"
 
 [tool.poetry.urls]
 "Automated Software Testing with Python" = "https://github.com/jpcadena/automated-software-testing"
@@ -236,6 +232,7 @@ ignore-decorators = ["typing.overload"]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = true
 
+
 [tool.mypy]
 exclude = ".venv|venv|tests|cache|.mypy_cache|.ruff_cache|.pytest_cache"
 ignore_missing_imports = true
@@ -265,59 +262,6 @@ raise_exceptions = true
 ignore_errors = true
 
 [tool.bandit]
-exclude_dirs = ["tests", "app/tests/*"]
+exclude_dirs = ["app/tests/*", "cli/tests/*", "restful_api/tests/*"]
 tests = ["B301"]
 skips = ["B101", "B601", "B201", ]
-
-[tool.poetry.scripts]
-test = "pytest"
-
-[tool.pytest.ini_options]
-addopts = [
-    "-rxXs", # Display extra info for test failures
-    "--strict-config", # Enforce strict pytest configuration
-    "--strict-markers", # Enforce strict markers
-    "--ignore=docs_src", # Ignore the 'docs_src' directory
-    "--durations=10"
-]
-empty_parameter_set_mark = "xfail"
-faulthandler_timeout = 5
-filterwarnings = [
-    "error",
-    'ignore:The loop argument is deprecated since Python 3\.8, and scheduled for removal in Python 3\.10:DeprecationWarning:asyncio',
-    'ignore:starlette.middleware.wsgi is deprecated and will be removed in a future release\..*:DeprecationWarning:starlette',
-    "ignore:'cgi' is deprecated:DeprecationWarning",
-    "ignore:'crypt' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
-    'ignore::pytest.PytestDeprecationWarning:pytest_cov',
-    "ignore::DeprecationWarning",
-    "ignore::UserWarning",
-    "ignore:the imp module is deprecated in favour of importlib:DeprecationWarning",
-]
-junit_duration_report = "call"
-junit_logging = "system-out"
-junit_log_passing_tests = false
-log_auto_indent = true
-log_cli = true
-log_cli_date_format = "%Y-%m-%d %H:%M:%S"
-log_cli_format = "%(asctime)s [%(level)s] %(message)s"
-log_cli_level = "INFO"
-log_date_format = "%Y-%m-%d %H:%M:%S"
-log_file = "logs/pytest-logs.txt"
-log_file_date_format = "%Y-%m-%d %H:%M:%S"
-log_file_format = "%(asctime)s [%(level)s] %(message)s"
-log_file_level = "INFO"
-log_format = "%(asctime)s [%(level)s] %(message)s"
-log_level = "INFO"
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration (deselect with '-m \"not integration\"')",
-]
-minversion = "6.0"
-norecursedirs = [".svn", "_build", "tmp*", "node_modules", "venv", ".venv"]
-python_classes = "*TestSuite"
-python_files = ["test_*.py", "*_test.py"]
-python_functions = ["test_*", "*_test"]
-pythonpath = ["src", "tests"]
-testpaths = ["tests"]
-verbosity_assertions = 2
-xfail_strict = true

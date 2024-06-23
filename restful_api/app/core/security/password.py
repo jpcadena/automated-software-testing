@@ -5,6 +5,7 @@ A module for password in the restful api.app.core.security package.
 from authlib.jose import JWTClaims, JoseError, jwt
 
 from restful_api.app.config.config import Config
+from restful_api.app.core.security.jwt import CustomJWTBearerTokenValidator
 from restful_api.app.db.db import Session
 from restful_api.app.models.user import User
 
@@ -20,10 +21,7 @@ def authenticate(username: str, password: str) -> User | None:
     :rtype: User
     """
     session = Session()
-    print("Authenticating")
     user: User | None = User.find_by_username(session, username)
-    print("user", type(user))
-    print(user)
     return user if user and user.check_password(password) else None
 
 
@@ -48,8 +46,20 @@ def decode_token(token: str) -> User | None:
     :return: The payload if the token is valid, None otherwise
     :rtype: User
     """
+    claims_options = {
+        "iss": {"value": Config.HOST},
+        "aud": {"value": "my-resource-server"},
+    }
+    validator = CustomJWTBearerTokenValidator(
+        Config.HOST, Config.HOST, Config.HOST
+    )
     try:
-        payload: JWTClaims = jwt.decode(token, Config.SECRET_KEY)
+        payload = jwt.decode(
+            token,
+            Config.SECRET_KEY,
+            claims_options=claims_options,
+        )
+        validator.authenticate_token(token)
         return identity(payload)
     except JoseError:
         return None

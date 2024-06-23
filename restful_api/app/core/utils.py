@@ -25,15 +25,23 @@ def generate_response(message: dict[str, Any], status_code: int) -> Response:
     return response
 
 
-def encode_jwt(identity: int) -> str:
+def encode_jwt(identity: int, issuer: str, audience: str) -> str:
     """
-    Encode a JWT token with the given identity.
+    Encode a JWT token with the given identity, issuer, and audience.
     :param identity: The user identity to include in the token.
     :type identity: int
+    :param issuer: The issuer (iss) of the JWT token.
+    :type issuer: str
+    :param audience: The audience (aud) of the JWT token.
+    :type audience: str
     :return: The encoded JWT token.
     :rtype: str
     """
     header: dict[str, str] = {"alg": "HS256"}
-    payload: dict[str, int] = {"identity": identity}
+    payload: dict[str, Any] = {
+        "identity": identity,
+        "iss": issuer,
+        "aud": audience,
+    }
     token: bytes = jwt.encode(header, payload, Config.SECRET_KEY)
     return token.decode()
