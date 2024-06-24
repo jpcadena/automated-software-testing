@@ -15,7 +15,7 @@ from restful_api.tests.test_base import BaseTest
 
 class ItemTest(BaseTest):
     def get_token(self) -> str:
-        return encode_jwt(identity=1)
+        return encode_jwt(1, "my-server-resource", "my-server-resource")
 
     def create_item_get_token(self, store: Store, session: Any) -> str:
         item: Item = Item(name="test_item", price=2.99, store_id=store.id)

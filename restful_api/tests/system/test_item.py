@@ -16,7 +16,7 @@ from restful_api.tests.system.base_test import BaseTest
 
 class ItemTest(BaseTest):
     def get_token(self) -> str:
-        return encode_jwt(identity=1)
+        return encode_jwt(1, "my-server-resource", "my-server-resource")
 
     def test_item_found(self) -> None:
         with self.app() as client:

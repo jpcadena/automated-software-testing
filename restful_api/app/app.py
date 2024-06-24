@@ -122,7 +122,8 @@ def create_app() -> Flask:
             print(f"Unexpected Error: {e}")
             return generate_response(
                 {
-                    "message": "An unexpected error occurred during authorization"
+                    "message": "An unexpected error occurred during"
+                    " authorization"
                 },
                 500,
             )

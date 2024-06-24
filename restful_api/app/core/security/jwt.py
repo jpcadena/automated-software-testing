@@ -24,18 +24,22 @@ class CustomJWTBearerTokenValidator(JWTBearerTokenValidator):  # type: ignore
             print(f"Decoded claims: {claims}")
             if claims.get("iss") != self.issuer:
                 print(
-                    f"Invalid issuer: expected {self.issuer}, got {claims.get('iss')}"
+                    f"Invalid issuer: expected {self.issuer}, got"
+                    f" {claims.get('iss')}"
                 )
                 raise JoseError(
-                    f"Invalid issuer: expected {self.issuer}, got {claims.get('iss')}"
+                    f"Invalid issuer: expected {self.issuer}, got"
+                    f" {claims.get('iss')}"
                 )
 
             if claims.get("aud") != self.audience:
                 print(
-                    f"Invalid audience: expected {self.audience}, got {claims.get('aud')}"
+                    f"Invalid audience: expected {self.audience}, got"
+                    f" {claims.get('aud')}"
                 )
                 raise JoseError(
-                    f"Invalid audience: expected {self.audience}, got {claims.get('aud')}"
+                    f"Invalid audience: expected {self.audience}, got"
+                    f" {claims.get('aud')}"
                 )
             claims.validate()
             print("Token validated successfully")

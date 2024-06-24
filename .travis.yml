@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.12-dev"
+before_install:
+- pip install --upgrade pip
+- pip install poetry
+# command to install dependencies
+install:
+- poetry install
+# command to run tests
+script:
+  - python -m pytest restful_api/tests/

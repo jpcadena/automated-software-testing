@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+
+</head>
+<body>
+{% if post %}
+    <h1>{{ post['title'] }}</h1>
+
+    <p>{{ post['content'] }}</p>
+{% else %}
+    <h1>Post not found!</h1>
+{% endif %}
+</body>
+</html>
