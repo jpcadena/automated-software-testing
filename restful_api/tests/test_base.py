@@ -21,7 +21,7 @@ class BaseTest(TestCase):
         :rtype: NoneType
         """
         app.config["SQLALCHEMY_DATABASE_URI"] = (
-            "postgresql://postgres:1234@localhost:5432/test"
+            "postgresql://postgres:1234@127.0.0.1:5432/test"
         )
         # SQLite does not support Foreign keys
         app.config["TESTING"] = True

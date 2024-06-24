@@ -38,7 +38,7 @@ def create_app() -> Flask:
     resource_protector: ResourceProtector = ResourceProtector()
     print(Config.HOST)
     validator: CustomJWTBearerTokenValidator = CustomJWTBearerTokenValidator(
-        Config.HOST, "localhost", "localhost"
+        Config.HOST, "127.0.0.1", "127.0.0.1"
     )
     resource_protector.register_token_validator(validator)
 
