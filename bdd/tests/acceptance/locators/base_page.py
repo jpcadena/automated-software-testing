@@ -10,3 +10,4 @@ class BasePageLocators:
         By.TAG_NAME,
         "h1",
     )
+    NAV_LINKS: tuple[str, str] = By.CLASS_NAME, "nav-link"

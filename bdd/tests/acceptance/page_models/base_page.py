@@ -19,3 +19,7 @@ class BasePage:
     @property
     def title(self) -> WebElement:
         return self.driver.find_element(*BasePageLocators.TITLE)
+
+    @property
+    def navigation(self) -> list[WebElement]:
+        return self.driver.find_elements(*BasePageLocators.NAV_LINKS)

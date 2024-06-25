@@ -9,13 +9,12 @@
             document.getElementById('posts').style.display = 'block';
         }, 3000);
     };
-
     </script>
 </head>
 <body>
     <h1>This is the blog page</h1>
 
-    <a href="{{ url_for('homepage') }}" class="nav-link" id="home-link">Go home</a>
+    <a href="{{ url_for('homepage') }}" class="nav-link" id="home-link">Go to home</a>
     <a href="{{ url_for('add_post') }}" class="nav-link" id="add-post-link">Create post</a>
 
     {% if posts|length > 0 %}

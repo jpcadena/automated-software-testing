@@ -6,7 +6,7 @@ from typing import Any
 
 from authlib.integrations.base_client import UnsupportedTokenTypeError
 from authlib.integrations.flask_client import OAuth
-from authlib.jose import JWTClaims, JoseError
+from authlib.jose import JoseError, JWTClaims
 from authlib.oauth2 import ResourceProtector
 from authlib.oauth2.rfc6749 import MissingAuthorizationError
 from flask import Flask, Response, g, request

@@ -2,7 +2,7 @@
 A module for jwt in the restful_api.app.core.security package.
 """
 
-from authlib.jose import JWTClaims, JoseError, JsonWebToken
+from authlib.jose import JoseError, JsonWebToken, JWTClaims
 from authlib.oauth2.rfc9068 import JWTBearerTokenValidator
 
 from restful_api.app.config.config import Config

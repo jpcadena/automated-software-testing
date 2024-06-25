@@ -2,7 +2,7 @@
 A module for password in the restful api.app.core.security package.
 """
 
-from authlib.jose import JWTClaims, JoseError, jwt
+from authlib.jose import JoseError, JWTClaims, jwt
 
 from restful_api.app.config.config import Config
 from restful_api.app.core.security.jwt import CustomJWTBearerTokenValidator

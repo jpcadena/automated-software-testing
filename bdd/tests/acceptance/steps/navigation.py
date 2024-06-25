@@ -9,9 +9,11 @@ from behave import given, then, use_step_matcher
 from behave.runner import Context
 from selenium.webdriver.chrome import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.remote.webelement import WebElement
 
 from bdd.tests.acceptance.page_models.blog_page import BlogPage
 from bdd.tests.acceptance.page_models.home_page import HomePage
+from bdd.tests.acceptance.page_models.new_post_page import NewPostPage
 
 use_step_matcher("re")
 options: Options = webdriver.Options()
@@ -65,6 +67,18 @@ def step_impl(
     context.driver.implicitly_wait(5)
 
 
+@given("I am on the new post page")
+def step_impl(
+    context: Context, *args: tuple[Any, ...], **kwargs: dict[str, Any]
+) -> None:
+    context.driver = webdriver.WebDriver(options=options)
+    context.driver.set_page_load_timeout(10)
+    new_post_page: NewPostPage = NewPostPage(context.driver)
+    context.driver.get(new_post_page.url)
+    context.driver.maximize_window()
+    context.driver.implicitly_wait(5)
+
+
 @then("I am on the blog page")
 def step_impl(
     context: Context, *args: tuple[Any, ...], **kwargs: dict[str, Any]
@@ -81,3 +95,13 @@ def step_impl(
     expected_url: str = HomePage(context.driver).url
     assert context.driver.current_url == expected_url
     time.sleep(5)
+
+
+@then('I can see there is a post with title "(.*)" in the posts section')
+def step_impl(context: Context, title: str) -> None:
+    blog_page: BlogPage = BlogPage(context.driver)
+    posts_with_title: list[WebElement] = [
+        post for post in blog_page.posts if post.text == title
+    ]
+    assert posts_with_title
+    assert all([post.is_displayed() for post in posts_with_title])
