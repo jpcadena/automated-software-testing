@@ -17,16 +17,32 @@ posts: list[dict[str, str]] = [
 
 @app.route("/")
 def homepage() -> str:
+    """
+    The homepage method
+    :return: The home rendered template
+    :rtype: str
+    """
     return render_template("home.html")
 
 
 @app.route("/blog")
 def blog_page() -> str:
+    """
+    Path to the blog section
+    :return: The blog rendered template
+    :rtype: str
+    """
     return render_template("blog.html", posts=posts)
 
 
 @app.route("/post", methods=["GET", "POST"])
 def add_post() -> Response | str:
+    """
+    Add a post to the blog
+    :return: The new post rendered template or a redirected response to blog
+    page
+    :rtype: Response or str
+    """
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
@@ -38,6 +54,13 @@ def add_post() -> Response | str:
 
 @app.route("/post/<string:title>")
 def see_post(title: str) -> str:
+    """
+    Search for a post given a title
+    :param title: The title of the post to seek
+    :type title: str
+    :return: The post rendered template
+    :rtype: str
+    """
     global posts
     for post in posts:
         if post["title"] == title:

@@ -1,3 +1,3 @@
 """
-Package bdd.tests initialization.
+Package bdd-tests initialization.
 """
