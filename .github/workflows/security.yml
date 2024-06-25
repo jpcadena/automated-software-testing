@@ -25,7 +25,7 @@ jobs:
       run: pip install bandit
 
     - name: Run Bandit
-      run: bandit -r . --exclude app/tests,restful_api/tests,cli/tests,bdd/tests
+      run: bandit -r pyproject.toml .
 
   # This job runs Safety for security checks
   safety:
