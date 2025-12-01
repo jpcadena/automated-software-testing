@@ -71,7 +71,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.12"
 isort = "^7.0.0"
-black = "^25.9.0"
+black = "^25.11.0"
 ruff = "^0.14.3"
 mypy = "^1.18.2"
 pre-commit = "^4.3.0"
